@@ -1,0 +1,29 @@
+ *.icon-white{color:white}
+ *.icon-silver{color:silver}
+ *.icon-green{color:green}
+ *.icon-dark{color:gray}
+ .table-responsive-xL thead th{
+	 width: 150px;
+ }
+ .pagination-justify-content-center {
+        list-style-type: none; /* Remove bullet points */
+        display: flex; /* Align items horizontally */
+        justify-content: center; /* Center items horizontally */
+    }
+
+    .page-item {
+        margin: 0 5px; /* Add margin between pagination items */
+    }
+
+    .page-link {
+        text-decoration: none; /* Remove underline from links */
+        padding: 5px 10px; /* Add padding to make links clickable */
+        border: 1px solid #ccc; /* Add border to links */
+        border-radius: 5px; /* Add rounded corners to links */
+        background-color: #f0f0f0; /* Add background color to links */
+        color: #333; /* Set text color for links */
+    }
+
+    .page-link:hover {
+        background-color: #ddd; /* Change background color on hover */
+    }

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head(${pageTitle})" />
+<body>
+	<div class="container-fluid">
+		
+	<div th:replace="navigation :: menu"></div>
+		
+		
+		<div>
+			<h2>Manage Categories | [[${pageTitle}]] </h2>
+		</div>
+
+	 <form id="categoryForm" style="max-width: 500px; margin: 0 auto" onsubmit="submitForm(); return false;" enctype="multipart/form-data">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" >
+    </div>
+    <div>
+      <label for="alias">Alias:</label>
+      <input type="text" id="alias" name="alias" >
+    </div>
+    <div>
+      <label for="parentCategory">Parent Category:</label>
+      <select id="parentCategory" name="parentCategory">
+        <option value="">Select Parent Category</option>
+        <!-- Populate this dropdown with parent categories -->
+      </select>
+    </div>
+    <div>
+      <label for="enabled">Enabled:</label>
+      <input type="checkbox" id="enabled" name="enabled">
+    </div>
+    <div>
+      <label for="image">Image:</label>
+      <input type="file" id="image" name="image" required="false">
+    </div>
+    <div>
+      <button type="submit">Save</button>
+      <button type="button" onclick="window.history.back()">Cancel</button>
+    </div>
+  </form>
+<script>		
+ fetch('http://localhost:8080/AmazonAdmin/api/categories/form')
+     .then(response => response.json())
+      .then(jsonData => {
+        // Populate parent category dropdown
+        const parentCategorySelect = document.getElementById('parentCategory');
+        jsonData.forEach(category => {
+          const option = document.createElement('option');
+          option.value = category.id;
+          option.textContent = category.name;
+          parentCategorySelect.appendChild(option);
+        });
+      })
+      .catch(error => console.error('Error fetching data:', error));
+     
+    function submitForm() {
+  const form = document.getElementById('categoryForm');
+  
+  // Send form data directly
+  fetch('http://localhost:8080/AmazonAdmin/api/categories/save', {
+    method: 'POST',
+    body: new FormData(form)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to save category');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Category saved:', data);
+    // Optionally redirect to another page or show a success message
+  })
+  .catch(error => {
+    console.error('Error saving category:', error);
+    // Handle error, show error message, etc.
+  });
+}
+  
+   </script>
+	
+	
+	
+	
+</body>
+
+</html>

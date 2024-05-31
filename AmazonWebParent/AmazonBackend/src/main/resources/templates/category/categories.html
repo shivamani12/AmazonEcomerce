@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Categories- Amazon Admin')"/>
+
+<body>
+    <div class="container-fluid">
+        <div th:replace="navigation :: menu"></div>
+
+        <div>
+            <h2>Manage Categories</h2>
+            <a th:href="@{/new}"> Create New Category</a>
+            &nbsp;&nbsp;
+            <a th:href="@{/categories/export/csv}"> Export to CSV</a>
+        </div>
+
+        <div>
+            <table class="table table-bordered table-striped table-hover table-responsive-xL m-2" id="categoryTable">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Category Image</th>
+                        <th>Category Name</th>
+                        <th>Alias</th>
+                        <th>Enabled</th>
+                        <th>Modify</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic content will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Fetch data from the server using AJAX
+        fetch('http://localhost:8080/AmazonAdmin/api/categories')
+            .then(response => response.json())
+            .then(data => {
+                const categoryTable = document.getElementById('categoryTable');
+                const tbody = categoryTable.querySelector('tbody');
+
+                // Iterate over the JSON data and create table rows
+                data.forEach(category => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${category.id}</td>
+                        <td><img src="${category.image}" alt="Category Image" style="width: 50px;"></td>
+                        <td>${category.name}</td>
+                        <td>${category.alias}</td>
+                        <td>${category.enabled ? 'Yes' : 'No'}</td>
+                        <td>
+                            <a href="/categories/edit/${category.id}" class="fa-solid fa-pen-to-square icon-green" title="Edit"></a>
+                            <a href="/categories/delete/${category.id}" class="fa-solid fa-trash icon-dark link-delete" title="Delete"></a>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching categories:', error));
+    </script>
+</body>
+</html>
